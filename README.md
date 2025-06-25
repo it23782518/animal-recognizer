@@ -1,122 +1,159 @@
-# Animal Recognizer
+# 🐾 Animal Recognizer
 
-A web application for recognizing animal images using machine learning.
+A full-stack AI-powered web application for identifying animals from uploaded images using a custom-trained deep learning model.
 
-## Overview
-This application uses a trained machine learning model to identify animals in uploaded images. It features a Next.js frontend and a Python backend for image processing and prediction.
+---
 
-## Features
-- Upload images to identify animals
-- Real-time prediction using a pre-trained TensorFlow model
-- Responsive UI built with Next.js and Tailwind CSS
+## 📌 Overview
 
-## Tech Stack
-- **Frontend**: Next.js, TypeScript, Tailwind CSS
-- **Backend**: Python (TensorFlow/Keras)
-- **API**: Next.js API routes
+**Animal Recognizer** is a Next.js + Python-based web app that allows users to upload images of animals and get real-time predictions.
 
-## Getting Started
+It uses a **TensorFlow/Keras deep learning model** for animal recognition and integrates with a **Next.js (TypeScript) frontend** for a responsive user experience.
 
-### Prerequisites
+---
+
+## 🚀 Features
+
+- ✅ Upload animal images from the browser  
+- ✅ Real-time predictions from a machine learning model  
+- ✅ Clean, responsive UI built with **Next.js**, **TypeScript**, and **Tailwind CSS**  
+- ✅ Backend inference powered by **Python** and **TensorFlow**
+
+---
+
+## 🧰 Tech Stack
+
+| Layer      | Technology                 |
+|----------- |----------------------------|
+| Frontend   | Next.js (TypeScript), Tailwind CSS |
+| Backend    | Python (TensorFlow, Pillow, NumPy) |
+| AI Model   | TensorFlow/Keras (`animal_model.h5`) |
+| API Layer  | Next.js API routes (TypeScript → Python) |
+
+---
+
+## 🏗️ Project Structure
+```bash
+animal-recognizer/
+├── src/
+│ ├── components/
+│ │ └── Predictor.tsx # Frontend UI component for image upload and results
+│ ├── models/
+│ │ └── animal_model.h5 # Trained TensorFlow/Keras animal classification model
+│ ├── pages/
+│ │ ├── api/
+│ │ │ └── predict.ts # Next.js API route - forwards request to Python backend
+│ │ ├── _app.tsx # Global Next.js app setup
+│ │ └── index.tsx # Main frontend page
+│ ├── styles/
+│ │ └── globals.css # Tailwind and global CSS styling
+│ └── util/
+│ └── labels.json # Class labels for prediction mapping
+├── server/
+│ └── predict.py # Python backend for model inference
+├── requirements.txt # Python dependencies
+└── README.md # This file
+```
+
+---
+
+## 🖥️ Getting Started (Local Development)
+
+### ✅ Prerequisites
+
 - Node.js (v14 or higher)
 - Python (v3.8 or higher)
 - npm or yarn
+- pip (Python package manager)
 
-### Installation
-1. Clone the repository
+---
+
+### 🔨 Installation Steps
+
+1. **Clone the Repository**
    ```bash
    git clone https://github.com/it23782518/animal-recognizer.git
    cd animal-recognizer
    ```
 
-2. Install JavaScript dependencies
+2. **Install Frontend Dependencies**
    ```bash
    npm install
    # or
    yarn install
    ```
 
-3. Install Python dependencies
+3. **Install Python Backend Dependencies**
    ```bash
-   pip install tensorflow pillow numpy
+   pip install -r requirements.txt
    ```
 
-4. Run the development server
+4. **Run Next.js Development Server**
    ```bash
    npm run dev
    # or
    yarn dev
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. **Open App in Browser**
+   ```
+   http://localhost:3000
+   ```
 
-## Deployment
+---
 
-This project can be deployed on Vercel. For optimal performance, you may need to configure Vercel to properly handle the Python backend.
+## 🧠 AI Model Training Summary
 
-### Special Deployment Considerations for Animal Recognizer
+The animal classification model (`animal_model.h5`) used in this project was **trained on Google Colab** using TensorFlow/Keras.
 
-When deploying this application to Vercel, there are several specific considerations:
+### 📍 Google Colab Training Notebook:
 
-1. **Python Backend**: Vercel requires special configuration for Python serverless functions:
-   - Create a `vercel.json` file in the root directory with the following content:
-     ```json
-     {
-       "functions": {
-         "src/server/*.py": {
-           "runtime": "vercel-python@3.1.0"
-         }
-       },
-       "routes": [
-         { "src": "/api/predict", "dest": "/api/predict.ts" }
-       ]
-     }
-     ```
+[Colab Training Link](https://colab.research.google.com/drive/1Lxqs1Xpi1tqzfvkwWuF34jLmgaItbC2m?usp=sharing)
 
-2. **Machine Learning Model**:
-   - The large ML model file (`animal_model.h5`) may exceed Vercel's size limits
-   - Consider uploading the model to a cloud storage service (AWS S3, Google Cloud Storage) 
-   - Modify the prediction code to download the model at runtime
-   - Alternatively, convert the model to a smaller format (TensorFlow.js, ONNX, etc.)
+### 📋 Training Details:
 
-3. **Dependencies**:
-   - Create a `requirements.txt` file in the root directory:
-     ```
-     tensorflow==2.9.0
-     pillow==9.2.0
-     numpy==1.23.1
-     ```
+- **Framework**: TensorFlow / Keras  
+- **Dataset**: Custom animal image dataset (classification into multiple animal categories)  
+- **Model Type**: CNN (Convolutional Neural Network)  
+- **Exported Model Format**: HDF5 (`animal_model.h5`)  
+- **Labels File**: Class label mapping saved in `src/util/labels.json`
 
-4. **Memory and Timeout Limits**:
-   - Vercel has a default timeout of 10 seconds for serverless functions
-   - Model loading and inference may exceed this limit
-   - Consider optimizing your model or upgrading to a paid plan for higher limits
+---
 
-### Vercel Deployment Troubleshooting
+## ✅ Prediction Flow
 
-If you encounter any of the following common errors when deploying to Vercel, here are some troubleshooting steps:
+```mermaid
+sequenceDiagram
+  participant User
+  participant Next.js Frontend
+  participant Next.js API (predict.ts)
+  participant Python Backend (predict.py)
+  participant TensorFlow Model
 
-#### Function-related Errors
-- `FUNCTION_INVOCATION_FAILED` (500): Check your Python code for errors. Ensure all dependencies are properly installed.
-- `FUNCTION_INVOCATION_TIMEOUT` (504): Your function is taking too long to respond. Optimize your model loading or use serverless functions with longer timeout settings.
-- `FUNCTION_PAYLOAD_TOO_LARGE` (413): The image being uploaded is too large. Implement client-side image compression or set a size limit.
+  User->>Next.js Frontend: Upload animal image
+  Next.js Frontend->>API Route: Send image POST request
+  API Route->>Python Backend: Forward image
+  Python Backend->>TensorFlow Model: Run inference
+  TensorFlow Model->>Python Backend: Return prediction
+  Python Backend->>API Route: Send JSON result
+  API Route->>Next.js Frontend: Return response
+  Next.js Frontend->>User: Display prediction result
+```
 
-#### Deployment Errors
-- `DEPLOYMENT_NOT_FOUND` (404): Make sure your deployment exists and hasn't been deleted.
-- `DEPLOYMENT_DISABLED` (402): Your deployment might require a paid plan or has been disabled. Check your Vercel account status.
-- `DEPLOYMENT_DELETED` (410): This occurs when a request is made to a deployment that has been removed according to your project's deployment retention policy. To restore a deleted deployment:
-  1. Go to your project's Settings tab in Vercel
-  2. Select Security on the side panel
-  3. Scroll down to the "Recently Deleted" section
-  4. Find your deployment and click the dropdown menu
-  5. Select "Restore" and complete the restoration process
-  
-  Note: Deleted deployments can only be restored within 30 days of deletion.
+## ✅ Future Improvements
 
-#### Common Solutions
-1. Use Vercel environment variables for configuration
-2. Ensure all Python dependencies are listed in `requirements.txt`
-3. For large ML models, consider storing them on a cloud storage service and downloading at runtime
-4. Check Vercel logs for detailed error information
+- ✅ Deploy model on cloud storage and load dynamically
+- ✅ Convert model to TensorFlow.js for frontend-only inference
+- ✅ Add confidence score visualization
+- ✅ Add drag-and-drop upload support
+- ✅ Implement image compression before upload
+- ✅ Add unit tests for backend and frontend components
 
-For a complete list of Vercel error codes and solutions, refer to the [Vercel Documentation](https://vercel.com/docs/errors).
+---
+
+## 👨‍💻 Author
+
+**Dilusha Chamika**  
+GitHub: [https://github.com/it23782518](https://github.com/it23782518)
+
+> 🦾 AI model trained and integrated by Dilusha Chamika
