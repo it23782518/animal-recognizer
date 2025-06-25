@@ -7,7 +7,6 @@ export default function Home() {
   const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showVercelNote, setShowVercelNote] = useState(true);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -227,30 +226,6 @@ export default function Home() {
               </div>
               <h3 className="font-semibold text-gray-800 mb-2">Easy to Use</h3>
               <p className="text-gray-600 text-sm">Simple drag-and-drop interface for quick animal identification</p>
-            </div>
-          </div>
-          
-          {/* Vercel Optimization Notice */}
-          <div className="mt-8 bg-indigo-50 rounded-lg p-4 border border-indigo-100">
-            <div className="flex items-start">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3 flex-1">
-                <h3 className="text-sm font-medium text-indigo-800">Deploying on Vercel?</h3>
-                <div className="mt-2 text-sm text-indigo-700">
-                  <p>
-                    If you're experiencing deployment issues on Vercel, try our optimized version that's compatible with serverless environments.
-                  </p>
-                  <p className="mt-2">
-                    <a href="/vercel-optimized" className="font-medium text-indigo-900 underline">
-                      Try Vercel-optimized version →
-                    </a>
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
