@@ -54,6 +54,44 @@ This application uses a trained machine learning model to identify animals in up
 
 This project can be deployed on Vercel. For optimal performance, you may need to configure Vercel to properly handle the Python backend.
 
+### Special Deployment Considerations for Animal Recognizer
+
+When deploying this application to Vercel, there are several specific considerations:
+
+1. **Python Backend**: Vercel requires special configuration for Python serverless functions:
+   - Create a `vercel.json` file in the root directory with the following content:
+     ```json
+     {
+       "functions": {
+         "src/server/*.py": {
+           "runtime": "vercel-python@3.1.0"
+         }
+       },
+       "routes": [
+         { "src": "/api/predict", "dest": "/api/predict.ts" }
+       ]
+     }
+     ```
+
+2. **Machine Learning Model**:
+   - The large ML model file (`animal_model.h5`) may exceed Vercel's size limits
+   - Consider uploading the model to a cloud storage service (AWS S3, Google Cloud Storage) 
+   - Modify the prediction code to download the model at runtime
+   - Alternatively, convert the model to a smaller format (TensorFlow.js, ONNX, etc.)
+
+3. **Dependencies**:
+   - Create a `requirements.txt` file in the root directory:
+     ```
+     tensorflow==2.9.0
+     pillow==9.2.0
+     numpy==1.23.1
+     ```
+
+4. **Memory and Timeout Limits**:
+   - Vercel has a default timeout of 10 seconds for serverless functions
+   - Model loading and inference may exceed this limit
+   - Consider optimizing your model or upgrading to a paid plan for higher limits
+
 ### Vercel Deployment Troubleshooting
 
 If you encounter any of the following common errors when deploying to Vercel, here are some troubleshooting steps:
@@ -66,6 +104,14 @@ If you encounter any of the following common errors when deploying to Vercel, he
 #### Deployment Errors
 - `DEPLOYMENT_NOT_FOUND` (404): Make sure your deployment exists and hasn't been deleted.
 - `DEPLOYMENT_DISABLED` (402): Your deployment might require a paid plan or has been disabled. Check your Vercel account status.
+- `DEPLOYMENT_DELETED` (410): This occurs when a request is made to a deployment that has been removed according to your project's deployment retention policy. To restore a deleted deployment:
+  1. Go to your project's Settings tab in Vercel
+  2. Select Security on the side panel
+  3. Scroll down to the "Recently Deleted" section
+  4. Find your deployment and click the dropdown menu
+  5. Select "Restore" and complete the restoration process
+  
+  Note: Deleted deployments can only be restored within 30 days of deletion.
 
 #### Common Solutions
 1. Use Vercel environment variables for configuration
